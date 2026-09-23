@@ -19,13 +19,14 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Generate Gradle Wrapper
+      run: gradle wrapper --gradle-version 8.4 || true
 
     - name: Build APK with Gradle
-      run: |
-        chmod +x gradlew || true
-        ./gradlew assembleDebug || echo "Files need setup"
+      run: ./gradlew assembleDebug
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
@@ -33,4 +34,3 @@ jobs:
         name: Zuraiz-Assistant-APK
         path: app/build/outputs/apk/debug/*.apk
       if: always()
-      
